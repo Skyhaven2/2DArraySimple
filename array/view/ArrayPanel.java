@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import array.controller.ArrayController;
+import array.model.Instrument;
+import array.model.SortingMachine;
 
 public class ArrayPanel extends JPanel
 {
@@ -19,6 +21,8 @@ public class ArrayPanel extends JPanel
 	private JTable instrumentTable;
 	private JScrollPane arrayTablePane;
 	private TableRender myRender = new TableRender();
+	private JButton sortButton;
+	private SortingMachine mySorter;
 	
 	public ArrayPanel(ArrayController baseController)
 	{
@@ -31,6 +35,9 @@ public class ArrayPanel extends JPanel
 		arrayInfoPane = new JScrollPane(arrayInfoArea);
 		instrumentTable = new JTable(new DefaultTableModel(baseController.getMyInstruments(), baseController.getInstrumentColumnNames()));
 		arrayTablePane = new JScrollPane(instrumentTable);
+		sortButton = new JButton("Sort Table");
+		startLayout.putConstraint(SpringLayout.SOUTH, sortButton, -10, SpringLayout.SOUTH, this);
+		startLayout.putConstraint(SpringLayout.EAST, sortButton, -6, SpringLayout.WEST, arrayTablePane);
 		
 		setupPane();
 		setupPanel();
@@ -59,6 +66,7 @@ public class ArrayPanel extends JPanel
 		this.add(findArrayInfoButton);
 		this.add(arrayInfoPane);
 		this.add(arrayTablePane);
+		this.add(sortButton);
 	}
 	
 	private void setupLayout()
@@ -105,6 +113,19 @@ public class ArrayPanel extends JPanel
 					JOptionPane.showMessageDialog(null, "Please put into the format: 0102 where 01 is row 1 in array and 02 is column 2 in array.");
 				}
 			}
+		});
+		
+		sortButton.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent click)
+			{
+				Instrument[][] d = mySorter.sortInstruments(baseController.getMyInstruments());
+				baseController.setMyInstruments(d);
+				instrumentTable.setModel(new DefaultTableModel(baseController.getMyInstruments(), baseController.getInstrumentColumnNames()));
+			}
+			
 		});
 	}
 }

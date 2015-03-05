@@ -1,6 +1,6 @@
 package array.model;
 
-public class Instrument
+public class Instrument implements Comparable
 {
 	private String name;
 	private double noiseLevel;
@@ -57,4 +57,37 @@ public class Instrument
 		
 		return instrumentInfo;
 	}
+	
+	/**
+	 * Instruments that are woodwinds are higher than non-woodwinds.
+	 * and Instruments of higher noise level are higher.
+	 * Being a woodwind is more important than noise level.
+	 */
+	public int compareTo(Object comparedInstrument)
+	{
+		int compareValue = 0;
+		if(((this.isAWoodwind) && ((Instrument) comparedInstrument).isAWoodwind()) || (!(this.isAWoodwind) && !((Instrument) comparedInstrument).isAWoodwind()))
+		{
+			if(this.noiseLevel < ((Instrument) comparedInstrument).getNoiseLevel())
+			{
+				compareValue = -1;
+			}
+			else if(this.noiseLevel > ((Instrument) comparedInstrument).getNoiseLevel())
+			{
+				compareValue = 1;
+			}
+		}
+		else if((this.isAWoodwind) && !((Instrument) comparedInstrument).isAWoodwind())
+		{
+			compareValue = 1;
+		}
+		else if(!(this.isAWoodwind) && ((Instrument) comparedInstrument).isAWoodwind())
+		{
+			compareValue = -1;
+		}
+
+		
+		return compareValue;
+	}
+	
 }
