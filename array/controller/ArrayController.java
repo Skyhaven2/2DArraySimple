@@ -11,14 +11,11 @@ public class ArrayController
 	private ArrayFrame appFrame;
 	private Instrument[][] myInstruments;
 	private String[] instrumentColumnNames;
-	private SortingMachine mySorter;
+	private String[] sortedInstrumentColumnNames;
 
 	public ArrayController()
-	{
-		myInstruments = new Instrument[3][4];
-		myStringArray = new String[3][5];
-		instrumentColumnNames = new String[4];
-		fillArrays();
+	{	
+		buildArrays();
 		appFrame = new ArrayFrame(this);
 	}
 
@@ -28,8 +25,13 @@ public class ArrayController
 		// printStringArray(myStringArray);
 	}
 
-	private void fillArrays()
+	private void buildArrays()
 	{
+		myInstruments = new Instrument[3][4];
+		myStringArray = new String[3][5];
+		instrumentColumnNames = new String[4];
+		sortedInstrumentColumnNames = new String[4];
+		
 		myInstruments[0][0] = new Instrument("Soprano Saxophone", 3, true);
 		myInstruments[0][1] = new Instrument("Alto Saxophone", 5, true);
 		myInstruments[0][2] = new Instrument("Tenor Saxophone", 6, true);
@@ -42,10 +44,6 @@ public class ArrayController
 		myInstruments[2][1] = new Instrument("Viola", 3, false);
 		myInstruments[2][2] = new Instrument("Cello", 3, false);
 		myInstruments[2][3] = new Instrument("Bass", 4, false);
-		
-//		myInstruments = this.sortInstruments(myInstruments);
-		!!!!!!!!!!!!!
-		myInstruments = mySorter.sortInstruments(myInstruments);
 
 		myStringArray[0][0] = "AA";
 		myStringArray[0][1] = "AB";
@@ -67,6 +65,11 @@ public class ArrayController
 		instrumentColumnNames[1] = "Medium-High Pitch";
 		instrumentColumnNames[2] = "Medium-Low Pitch";
 		instrumentColumnNames[3] = "Low Pitch";
+		
+		sortedInstrumentColumnNames[0] = "Best";
+		sortedInstrumentColumnNames[1] = "";
+		sortedInstrumentColumnNames[2] = "";
+		sortedInstrumentColumnNames[3] = "Worst";
 	}
 
 	private void printIntArray(int[][] intArray)
@@ -121,76 +124,8 @@ public class ArrayController
 		return instrumentColumnNames;
 	}
 	
-	
-	
-	
-	
-	
-//	/**
-//	 * This method sorts a 2d array of Instrument based on the Instrument compareTo method.
-//	 * The Instruments are sorted highest to lowest starting at the top left
-//	 * and going left to right then moving to the next row. (Standard English Paragraph Reading)
-//	 * @param Instruments
-//	 * @return Sorted 2d array of Instruments
-//	 */
-//	public Instrument[][] sortInstruments(Instrument[][] Instruments)
-//	{
-//		Instrument[] sorterInstruments = instrumentConvertTwoDArrayToOneD(Instruments);
-//		for (int currentLocationToFill = 0; currentLocationToFill < sorterInstruments.length; currentLocationToFill++)
-//		{
-//			Instrument bestInstrument = sorterInstruments[currentLocationToFill];
-//			int currentLocationToSwap = currentLocationToFill;
-//			for (int location = currentLocationToFill; location < sorterInstruments.length; location++)
-//			{
-//				if ((bestInstrument.compareTo(sorterInstruments[location])) <= -1)
-//				{
-//					bestInstrument = sorterInstruments[location];
-//					currentLocationToSwap = location;
-//				}
-//			}
-//			swapInstruments(sorterInstruments, currentLocationToFill, currentLocationToSwap);
-//		}
-//		Instruments = instrumentConvertOneDArrayToTwoD(sorterInstruments, Instruments.length, Instruments[0].length);
-//
-//		return Instruments;
-//	}
-//	
-//	public Instrument[] instrumentConvertTwoDArrayToOneD(Instrument[][] twoDArray)
-//	{
-//		int counter = 0;
-//		Instrument[] oneDArray = new Instrument[(twoDArray.length) * (twoDArray[0].length)];
-//		for (int row = 0; row < twoDArray.length; row++)
-//		{
-//			for (int col = 0; col < twoDArray[row].length; col++)
-//			{
-//				oneDArray[counter] = twoDArray[row][col];
-//				counter++;
-//			}
-//		}
-//		
-//		return oneDArray;
-//	}
-//	
-//	public Instrument[][] instrumentConvertOneDArrayToTwoD(Instrument[] oneDArray, int twoDRows, int twoDColumns)
-//	{
-//		int counter = 0;
-//		Instrument[][] twoDArray = new Instrument[twoDRows][twoDColumns];
-//		for (int row = 0; row < twoDArray.length; row++)
-//		{
-//			for (int col = 0; col < twoDArray[row].length; col++)
-//			{
-//				twoDArray[row][col] = oneDArray[counter];
-//				counter++;
-//			}
-//		}
-//
-//		return twoDArray;
-//	}
-//	
-//	public void swapInstruments(Instrument[] array, int position, int change)
-//	{
-//		Instrument temp = array[position];
-//		array[position] = array[change];
-//		array[change] = temp;
-//	}
-}
+	public String[] getSortedInstrumentColumnNames()
+	{
+		return sortedInstrumentColumnNames;
+	}
+}	

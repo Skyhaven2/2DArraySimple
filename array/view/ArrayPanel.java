@@ -20,13 +20,15 @@ public class ArrayPanel extends JPanel
 	private JScrollPane arrayInfoPane;
 	private JTable instrumentTable;
 	private JScrollPane arrayTablePane;
-	private TableRender myRender = new TableRender();
+	private TableRender myRender;
 	private JButton sortButton;
 	private SortingMachine mySorter;
-	
+
 	public ArrayPanel(ArrayController baseController)
 	{
 		this.baseController = baseController;
+		mySorter = new SortingMachine();
+		myRender = new TableRender();
 
 		startLayout = new SpringLayout();
 		findArrayInfoButton = new JButton("Search");
@@ -36,27 +38,25 @@ public class ArrayPanel extends JPanel
 		instrumentTable = new JTable(new DefaultTableModel(baseController.getMyInstruments(), baseController.getInstrumentColumnNames()));
 		arrayTablePane = new JScrollPane(instrumentTable);
 		sortButton = new JButton("Sort Table");
-		startLayout.putConstraint(SpringLayout.SOUTH, sortButton, -10, SpringLayout.SOUTH, this);
-		startLayout.putConstraint(SpringLayout.EAST, sortButton, -6, SpringLayout.WEST, arrayTablePane);
-		
+
 		setupPane();
 		setupPanel();
 		setupLayout();
 		setupListners();
 	}
-	
+
 	private void setupPane()
 	{
 		arrayInfoArea.setText("Array information appears here.");
 		arrayInfoArea.setLineWrap(true);
 		arrayInfoArea.setWrapStyleWord(true);
 		arrayInfoArea.setEditable(false);
-		for(int col = 0; col < instrumentTable.getColumnCount(); col++)
+		for (int col = 0; col < instrumentTable.getColumnCount(); col++)
 		{
 			instrumentTable.getColumnModel().getColumn(col).setCellRenderer(myRender);
 		}
 	}
-	
+
 	private void setupPanel()
 	{
 		this.setSize(900, 400);
@@ -68,7 +68,7 @@ public class ArrayPanel extends JPanel
 		this.add(arrayTablePane);
 		this.add(sortButton);
 	}
-	
+
 	private void setupLayout()
 	{
 		startLayout.putConstraint(SpringLayout.WEST, findArrayInfoButton, 0, SpringLayout.WEST, arrayInfoPane);
@@ -78,8 +78,10 @@ public class ArrayPanel extends JPanel
 		startLayout.putConstraint(SpringLayout.EAST, searchArrayTextfield, 0, SpringLayout.EAST, arrayInfoPane);
 		startLayout.putConstraint(SpringLayout.NORTH, findArrayInfoButton, -1, SpringLayout.NORTH, searchArrayTextfield);
 		startLayout.putConstraint(SpringLayout.WEST, arrayTablePane, 370, SpringLayout.WEST, this);
+		startLayout.putConstraint(SpringLayout.SOUTH, sortButton, -10, SpringLayout.SOUTH, this);
+		startLayout.putConstraint(SpringLayout.EAST, sortButton, -6, SpringLayout.WEST, arrayTablePane);
 	}
-	
+
 	private void setupListners()
 	{
 		findArrayInfoButton.addActionListener(new ActionListener()
@@ -87,7 +89,7 @@ public class ArrayPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent click)
 			{
-				if(searchArrayTextfield.getText().length() <=4)
+				if (searchArrayTextfield.getText().length() <= 4)
 				{
 					try
 					{
@@ -96,14 +98,14 @@ public class ArrayPanel extends JPanel
 						int col = Integer.parseInt(searchArrayTextfield.getText().substring(2, 4));
 						try
 						{
-							arrayInfoArea.setText(baseController.getOneInstrument(row,col).toString());
+							arrayInfoArea.setText(baseController.getOneInstrument(row, col).toString());
 						}
-						catch(Exception exception)
+						catch (Exception exception)
 						{
 							JOptionPane.showMessageDialog(null, "This location doesn't exsist in the 2d array.");
 						}
 					}
-					catch(Exception exception)
+					catch (Exception exception)
 					{
 						JOptionPane.showMessageDialog(null, "Please put into the format: 0102 where 01 is the row in array and 02 is the column in array.");
 					}
@@ -114,18 +116,23 @@ public class ArrayPanel extends JPanel
 				}
 			}
 		});
-		
+
 		sortButton.addActionListener(new ActionListener()
 		{
 
 			@Override
 			public void actionPerformed(ActionEvent click)
 			{
-				Instrument[][] d = mySorter.sortInstruments(baseController.getMyInstruments());
-				baseController.setMyInstruments(d);
-				instrumentTable.setModel(new DefaultTableModel(baseController.getMyInstruments(), baseController.getInstrumentColumnNames()));
+//				Instrument[][] SortedInstrumentArray = mySorter.sortInstruments(baseController.getMyInstruments());
+//				Instrument[][] SortedInstrumentArray = mySorter.sortInstrumentsAlphabetically(baseController.getMyInstruments());
+				Instrument[][] SortedInstrumentArray = mySorter.sortInstrumentsByNoiseLevel(baseController.getMyInstruments());
+				instrumentTable.setModel(new DefaultTableModel(SortedInstrumentArray, baseController.getSortedInstrumentColumnNames()));
+				for (int col = 0; col < instrumentTable.getColumnCount(); col++)
+				{
+					instrumentTable.getColumnModel().getColumn(col).setCellRenderer(myRender);
+				}
 			}
-			
+
 		});
 	}
 }

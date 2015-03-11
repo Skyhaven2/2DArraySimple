@@ -60,6 +60,56 @@ public class SortingMachine
 		array[change] = temp;
 	}
 	
+	public Instrument[][] sortInstrumentsByNoiseLevel(Instrument[][] Instruments)
+	{
+		startTime = System.currentTimeMillis();
+		Instrument[] sorterInstruments = instrumentConvertTwoDArrayToOneD(Instruments);
+		for (int currentLocationToFill = 0; currentLocationToFill < sorterInstruments.length; currentLocationToFill++)
+		{
+			Instrument topInstrument = sorterInstruments[currentLocationToFill];
+			int currentLocationToSwap = currentLocationToFill;
+			for (int location = currentLocationToFill; location < sorterInstruments.length; location++)
+			{
+				if (topInstrument.getNoiseLevel() < sorterInstruments[location].getNoiseLevel())
+				{
+					topInstrument = sorterInstruments[location];
+					currentLocationToSwap = location;
+				}
+			}
+			swapInstruments(sorterInstruments, currentLocationToFill, currentLocationToSwap);
+		}
+		Instruments = instrumentConvertOneDArrayToTwoD(sorterInstruments, Instruments.length, Instruments[0].length);
+		endTime = System.currentTimeMillis();
+		sortTime = endTime - startTime;
+		
+		return Instruments;
+	}
+	
+	public Instrument[][] sortInstrumentsAlphabetically(Instrument[][] Instruments)
+	{
+		startTime = System.currentTimeMillis();
+		Instrument[] sorterInstruments = instrumentConvertTwoDArrayToOneD(Instruments);
+		for (int currentLocationToFill = 0; currentLocationToFill < sorterInstruments.length; currentLocationToFill++)
+		{
+			Instrument topInstrument = sorterInstruments[currentLocationToFill];
+			int currentLocationToSwap = currentLocationToFill;
+			for (int location = currentLocationToFill; location < sorterInstruments.length; location++)
+			{
+				if ((topInstrument.toString().compareTo(sorterInstruments[location].toString())) >= 1)
+				{
+					topInstrument = sorterInstruments[location];
+					currentLocationToSwap = location;
+				}
+			}
+			swapInstruments(sorterInstruments, currentLocationToFill, currentLocationToSwap);
+		}
+		Instruments = instrumentConvertOneDArrayToTwoD(sorterInstruments, Instruments.length, Instruments[0].length);
+		endTime = System.currentTimeMillis();
+		sortTime = endTime - startTime;
+		
+		return Instruments;
+	}
+	
 	/**
 	 * This method sorts a 2d array of Instrument based on the Instrument compareTo method.
 	 * The Instruments are sorted highest to lowest starting at the top left
@@ -69,6 +119,7 @@ public class SortingMachine
 	 */
 	public Instrument[][] sortInstruments(Instrument[][] Instruments)
 	{
+		startTime = System.currentTimeMillis();
 		Instrument[] sorterInstruments = instrumentConvertTwoDArrayToOneD(Instruments);
 		for (int currentLocationToFill = 0; currentLocationToFill < sorterInstruments.length; currentLocationToFill++)
 		{
@@ -85,7 +136,9 @@ public class SortingMachine
 			swapInstruments(sorterInstruments, currentLocationToFill, currentLocationToSwap);
 		}
 		Instruments = instrumentConvertOneDArrayToTwoD(sorterInstruments, Instruments.length, Instruments[0].length);
-
+		endTime = System.currentTimeMillis();
+		sortTime = endTime - startTime;
+		
 		return Instruments;
 	}
 	
